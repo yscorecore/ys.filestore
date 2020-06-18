@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using YS.Knife.Aop;
 
 namespace YS.FileStore
 {
+    [ParameterValidation]
     public interface IFileStoreService
     {
-        Task<string> Put(Stream content, string fileKey, IDictionary<string, string> tags = default);
-        Task<string> GetUrl(string fileKey);
-        Task<bool> Update(string fileKey, IDictionary<string, string> tags);
-        Task<bool> Exists(string fileKey);
-        Task<bool> DeleteByKey(string fileKey);
+        Task<string> Put(Stream content, [FileKeyRule] string fileKey, IDictionary<string, string> tags = default);
+        Task<string> GetUrl([FileKeyRule] string fileKey);
+        Task<bool> Update([FileKeyRule] string fileKey, IDictionary<string, string> tags);
+        Task<bool> Exists([FileKeyRule] string fileKey);
+        Task<bool> DeleteByKey([FileKeyRule] string fileKey);
         Task<int> Count(IDictionary<string, string> tags);
-        Task<List<string>> ListKeys(Dictionary<string, string> tags, string startFileKey = default);
-        Task<IList<string>> DeleteBytags(Dictionary<string, string> tags, string startFileKey = default);
+        Task<List<string>> ListKeys(Dictionary<string, string> tags, [FileKeyRule(false)] string startFileKey = default);
+        Task<IList<string>> DeleteByCondition(Dictionary<string, string> tags, [FileKeyRule(false)] string startFileKey = default);
     }
 
 }
