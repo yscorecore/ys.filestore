@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="YS.Knife.Aop" Version="1.2.7" />
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
 
 </Project>

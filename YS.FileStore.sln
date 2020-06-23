@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YS.FileStore.Core", "src\YS.FileStore.Core\YS.FileStore.Core.csproj", "{16D6C571-0C64-4EA4-A800-2833772C771A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EA211798-6BC7-4824-A565-BB69B21BBE50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YS.FileStore.Core.UnitTest", "test\YS.FileStore.Core.UnitTest\YS.FileStore.Core.UnitTest.csproj", "{FB35E36C-73F3-4F52-8D0C-D64BACA81161}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,11 +23,18 @@ Global
 		{F580ED40-1732-47B4-B2A3-A4D3A0CAC46C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F580ED40-1732-47B4-B2A3-A4D3A0CAC46C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F580ED40-1732-47B4-B2A3-A4D3A0CAC46C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB35E36C-73F3-4F52-8D0C-D64BACA81161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB35E36C-73F3-4F52-8D0C-D64BACA81161}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB35E36C-73F3-4F52-8D0C-D64BACA81161}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB35E36C-73F3-4F52-8D0C-D64BACA81161}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB11BB21-3F5D-42D6-8737-F19C0666F1F8}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FB35E36C-73F3-4F52-8D0C-D64BACA81161} = {EA211798-6BC7-4824-A565-BB69B21BBE50}
 	EndGlobalSection
 EndGlobal

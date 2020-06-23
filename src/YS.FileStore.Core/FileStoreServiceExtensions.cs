@@ -8,9 +8,9 @@ namespace YS.FileStore
 {
     public static class FileStoreServiceExtensions
     {
-        public static async Task<string> Put(this IFileStoreService fileStoreService, string filePath, string fileKey, IDictionary<string, string> tags = default)
+        public static async Task<string> PutLocalFile(this IFileStoreService fileStoreService, string localFilePath, string fileKey, IDictionary<string, string> tags = default)
         {
-            using (var fileStream = new System.IO.FileStream(filePath, FileMode.Open))
+            using (var fileStream = new FileStream(localFilePath, FileMode.Open))
             {
                 return await fileStoreService.Put(fileStream, fileKey, tags);
             }
