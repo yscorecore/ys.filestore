@@ -13,20 +13,21 @@ namespace YS.FileStore.Core.UnitTest
         {
             var fileStoreService = Mock.Of<IFileStoreService>();
             var tempFile = Path.GetTempFileName();
+            var bucketName = "bucket";
             var fileKey = "key";
             var tags = new Dictionary<string, string>();
             var content = default(string);
             File.WriteAllText(tempFile, "fake content.");
-            Mock.Get(fileStoreService).Setup(p => p.Put(It.IsAny<Stream>(), fileKey, tags))
-                .Callback<Stream, string, IDictionary<string, string>>((a, b, c) =>
-                {
-                    using (var reader = new StreamReader(a))
-                    {
-                        content = reader.ReadToEnd();
-                    }
-                });
+            Mock.Get(fileStoreService).Setup(p => p.Put(bucketName, fileKey, It.IsAny<Stream>(), tags))
+                .Callback<string, string, Stream, IDictionary<string, string>>((a, b, c, d) =>
+                 {
+                     using (var reader = new StreamReader(c))
+                     {
+                         content = reader.ReadToEnd();
+                     }
+                 });
 
-            await fileStoreService.PutLocalFile(tempFile, fileKey, tags);
+            await fileStoreService.PutLocalFile(bucketName, fileKey, tempFile, tags);
             Assert.AreEqual("fake content.", content);
         }
 
@@ -34,19 +35,20 @@ namespace YS.FileStore.Core.UnitTest
         public async Task ShouldCallPutMethodWhenPutJsonObject()
         {
             var fileStoreService = Mock.Of<IFileStoreService>();
+            var bucketName = "bucket";
             var fileKey = "key";
             var tags = new Dictionary<string, string>();
             var content = default(string);
-            Mock.Get(fileStoreService).Setup(p => p.Put(It.IsAny<Stream>(), fileKey, tags))
-                .Callback<Stream, string, IDictionary<string, string>>((a, b, c) =>
+            Mock.Get(fileStoreService).Setup(p => p.Put(bucketName, fileKey, It.IsAny<Stream>(), tags))
+                .Callback<string, string, Stream, IDictionary<string, string>>((a, b, c, d) =>
                 {
-                    using (var reader = new StreamReader(a))
+                    using (var reader = new StreamReader(c))
                     {
                         content = reader.ReadToEnd();
                     }
                 });
 
-            await fileStoreService.PutJsonObject(new { NM = "fake name." }, fileKey, tags);
+            await fileStoreService.PutJsonObject(bucketName, fileKey, new { NM = "fake name." }, tags);
             Assert.AreEqual("{\"NM\":\"fake name.\"}", content);
         }
 
@@ -54,18 +56,19 @@ namespace YS.FileStore.Core.UnitTest
         public async Task ShouldCallPutMethodWhenPutContent()
         {
             var fileStoreService = Mock.Of<IFileStoreService>();
+            var bucketName = "bucket";
             var fileKey = "key";
             var tags = new Dictionary<string, string>();
             var content = default(string);
-            Mock.Get(fileStoreService).Setup(p => p.Put(It.IsAny<Stream>(), fileKey, tags))
-                .Callback<Stream, string, IDictionary<string, string>>((a, b, c) =>
-                {
-                    using (var reader = new StreamReader(a))
-                    {
-                        content = reader.ReadToEnd();
-                    }
-                });
-            await fileStoreService.PutContent("fake content.", fileKey, tags);
+            Mock.Get(fileStoreService).Setup(p => p.Put(bucketName, fileKey, It.IsAny<Stream>(), tags))
+               .Callback<string, string, Stream, IDictionary<string, string>>((a, b, c, d) =>
+               {
+                   using (var reader = new StreamReader(c))
+                   {
+                       content = reader.ReadToEnd();
+                   }
+               });
+            await fileStoreService.PutContent(bucketName, fileKey, "fake content.", tags);
             Assert.AreEqual("fake content.", content);
         }
     }
