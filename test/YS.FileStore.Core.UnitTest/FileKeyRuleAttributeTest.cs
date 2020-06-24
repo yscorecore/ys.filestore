@@ -3,7 +3,7 @@
 namespace YS.FileStore
 {
     [TestClass]
-    public class FileKeyRuleTest
+    public class FileKeyRuleAttributeTest
     {
         [DataRow("abc/bcd/cde", true)]
         [DataRow("123/path1/name", true)]
@@ -41,6 +41,15 @@ namespace YS.FileStore
         public void ShouldBeAnInValidFileKey(string fileKey, bool required)
         {
             var attr = new FileKeyRuleAttribute(required);
+            Assert.IsFalse(attr.IsValid(fileKey));
+        }
+
+        [DataRow("")]
+        [DataRow(null)]
+        [DataTestMethod]
+        public void ShouldBeAnInvalidFile(string fileKey)
+        {
+            var attr = new FileKeyRuleAttribute();
             Assert.IsFalse(attr.IsValid(fileKey));
         }
     }

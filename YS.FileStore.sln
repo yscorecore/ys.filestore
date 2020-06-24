@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EA211798-6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YS.FileStore.Core.UnitTest", "test\YS.FileStore.Core.UnitTest\YS.FileStore.Core.UnitTest.csproj", "{FB35E36C-73F3-4F52-8D0C-D64BACA81161}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{82492610-B5ED-11EA-80EF-CF5A1F471829}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,7 @@ Global
 		SolutionGuid = {DB11BB21-3F5D-42D6-8737-F19C0666F1F8}
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{16D6C571-0C64-4EA4-A800-2833772C771A} = {82492610-B5ED-11EA-80EF-CF5A1F471829}
 		{FB35E36C-73F3-4F52-8D0C-D64BACA81161} = {EA211798-6BC7-4824-A565-BB69B21BBE50}
 	EndGlobalSection
 EndGlobal
