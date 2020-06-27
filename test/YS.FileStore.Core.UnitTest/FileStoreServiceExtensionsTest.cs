@@ -15,10 +15,10 @@ namespace YS.FileStore.Core.UnitTest
             var tempFile = Path.GetTempFileName();
             var bucketName = "bucket";
             var fileKey = "key";
-            var tags = new Dictionary<string, string>();
+            var properties = new Dictionary<string, string>();
             var content = default(string);
             File.WriteAllText(tempFile, "fake content.");
-            Mock.Get(fileStoreService).Setup(p => p.Put(bucketName, fileKey, It.IsAny<Stream>(), tags))
+            Mock.Get(fileStoreService).Setup(p => p.PutStream(bucketName, fileKey, It.IsAny<Stream>(), properties))
                 .Callback<string, string, Stream, IDictionary<string, string>>((a, b, c, d) =>
                  {
                      using (var reader = new StreamReader(c))
@@ -27,7 +27,7 @@ namespace YS.FileStore.Core.UnitTest
                      }
                  });
 
-            await fileStoreService.PutLocalFile(bucketName, fileKey, tempFile, tags);
+            await fileStoreService.PutLocalFile(bucketName, fileKey, tempFile, properties);
             Assert.AreEqual("fake content.", content);
         }
 
@@ -37,9 +37,9 @@ namespace YS.FileStore.Core.UnitTest
             var fileStoreService = Mock.Of<IFileStoreService>();
             var bucketName = "bucket";
             var fileKey = "key";
-            var tags = new Dictionary<string, string>();
+            var properties = new Dictionary<string, string>();
             var content = default(string);
-            Mock.Get(fileStoreService).Setup(p => p.Put(bucketName, fileKey, It.IsAny<Stream>(), tags))
+            Mock.Get(fileStoreService).Setup(p => p.PutStream(bucketName, fileKey, It.IsAny<Stream>(), properties))
                 .Callback<string, string, Stream, IDictionary<string, string>>((a, b, c, d) =>
                 {
                     using (var reader = new StreamReader(c))
@@ -48,7 +48,7 @@ namespace YS.FileStore.Core.UnitTest
                     }
                 });
 
-            await fileStoreService.PutJsonObject(bucketName, fileKey, new { NM = "fake name." }, tags);
+            await fileStoreService.PutJsonObject(bucketName, fileKey, new { NM = "fake name." }, properties);
             Assert.AreEqual("{\"NM\":\"fake name.\"}", content);
         }
 
@@ -58,9 +58,9 @@ namespace YS.FileStore.Core.UnitTest
             var fileStoreService = Mock.Of<IFileStoreService>();
             var bucketName = "bucket";
             var fileKey = "key";
-            var tags = new Dictionary<string, string>();
+            var properties = new Dictionary<string, string>();
             var content = default(string);
-            Mock.Get(fileStoreService).Setup(p => p.Put(bucketName, fileKey, It.IsAny<Stream>(), tags))
+            Mock.Get(fileStoreService).Setup(p => p.PutStream(bucketName, fileKey, It.IsAny<Stream>(), properties))
                .Callback<string, string, Stream, IDictionary<string, string>>((a, b, c, d) =>
                {
                    using (var reader = new StreamReader(c))
@@ -68,7 +68,7 @@ namespace YS.FileStore.Core.UnitTest
                        content = reader.ReadToEnd();
                    }
                });
-            await fileStoreService.PutContent(bucketName, fileKey, "fake content.", tags);
+            await fileStoreService.PutContent(bucketName, fileKey, "fake content.", properties);
             Assert.AreEqual("fake content.", content);
         }
     }
