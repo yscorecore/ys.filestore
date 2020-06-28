@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System;
 using System.Threading.Tasks;
 using YS.Knife.Aws.S3;
 using Amazon.S3;
@@ -15,82 +16,56 @@ namespace YS.FileStore.Impl.Aws.S3
             amazonS3 = s3;
         }
 
-        public Task<int> Count(string bucket, IDictionary<string, string> properties)
+        public async Task<bool> Delete([BucketRule] string bucket, [FileKeyRule] string fileKey)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                _ = await amazonS3.DeleteObjectAsync(bucket, fileKey);
+                return true;
+            }
+            catch (AmazonS3Exception e) when (e.ErrorCode == "NoSuchBucket" || e.ErrorCode == "NotFound")
+            {
+                return false;
+            }
         }
 
-        public Task<IList<string>> DeleteByCondition(string bucket, Dictionary<string, string> properties, string startFileKey = null)
+        public async Task<bool> Exists([BucketRule] string bucket, [FileKeyRule] string fileKey)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                _ = await amazonS3.GetObjectMetadataAsync(bucket, fileKey);
+                return true;
+            }
+            catch (AmazonS3Exception e) when (e.ErrorCode == "NoSuchBucket" || e.ErrorCode == "NotFound")
+            {
+                return false;
+            }
         }
 
-        public async Task<bool> DeleteByKey(string bucket, string fileKey)
+        public async Task<Stream> GetStream([BucketRule] string bucket, [FileKeyRule] string fileKey)
         {
-            var request = new DeleteObjectRequest
+            var getObjectRequest = new GetObjectRequest
             {
                 BucketName = bucket,
-                Key = fileKey,
+                Key = fileKey
             };
-            var response = await amazonS3.DeleteObjectAsync(request);
-            return true;
+            var response = await this.amazonS3.GetObjectAsync(getObjectRequest);
+            return response.ResponseStream;
         }
 
-        public async Task<bool> Exists(string bucket, string fileKey)
+        public async Task PutStream([BucketRule] string bucket, [FileKeyRule] string fileKey, Stream content, bool forceCreateNew = false)
         {
-            
-        
-        }
-
-        public Task<Stream> GetStream([BucketRule] string bucket, [FileKeyRule] string fileKey)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<string> GetUrl(string bucket, string fileKey)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<List<string>> ListKeys(string bucket, Dictionary<string, string> properties, [FileKeyRule(false)] string startFileKey = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<string> PutStream(string bucket, string fileKey, Stream content, IDictionary<string, string> properties = null)
-        {
-           AmazonS3Client s3Client;
-           s3Client.url
-            var request = new PutObjectRequest
+            if (!forceCreateNew && await this.Exists(bucket, fileKey))
+            {
+                throw new Exception($"This file '{fileKey}' already exists in bucket '{bucket}'.");
+            }
+            var pubObjectRequest = new PutObjectRequest
             {
                 BucketName = bucket,
                 FilePath = fileKey,
                 Key = fileKey,
-                InputStream = content,
-                ContentType="...",
             };
-            var response =  await amazonS3.PutObjectAsync(request);
-
-        }
-
-        public Task<bool> Update(string bucket, string fileKey, IDictionary<string, string> properties)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void AppendMetadataCollection(MetadataCollection metadata, IDictionary<string, string> dict)
-        {
-            if (dict != null)
-            {
-                foreach (var kv in dict)
-                {
-                    metadata.Add(kv.Key, kv.Value);
-                }
-            }
-        }
-        private string GetContentTypeByName()
-        {
-            return "";
+            _ = await this.amazonS3.PutObjectAsync(pubObjectRequest);
         }
     }
 }
