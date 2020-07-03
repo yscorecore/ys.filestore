@@ -9,7 +9,9 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>YS.FileStore</RootNamespace>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="YS.Knife.Hosting" Version="1.2.7" />
+  </ItemGroup>
 
 
 </Project>

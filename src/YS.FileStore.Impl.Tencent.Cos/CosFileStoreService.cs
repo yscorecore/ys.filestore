@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System;
 using System.Threading.Tasks;
 using COSXML;
 using COSXML.Model.Object;
@@ -7,7 +8,7 @@ using Tencent.QCloud.Cos.Sdk;
 
 namespace YS.FileStore.Impl.Tencent.Cos
 {
-    [YS.Knife.ServiceClass(typeof(IFileStoreService), Lifetime = ServiceLifetime.Singleton))]
+    [YS.Knife.ServiceClass(typeof(IFileStoreService), Lifetime = ServiceLifetime.Singleton)]
     public class CosFileStoreService : IFileStoreService
     {
         readonly CosXmlServer server;
@@ -23,8 +24,16 @@ namespace YS.FileStore.Impl.Tencent.Cos
 
         public Task<bool> Exists(string bucket, string fileKey)
         {
-            var head = server.HeadObject(new HeadObjectRequest(bucket, fileKey));
-            return Task.FromResult(true);
+            try
+            {
+                var head = server.HeadObject(new HeadObjectRequest(bucket, fileKey));
+                return Task.FromResult(true);
+            }
+            catch (COSXML.CosException.CosServerException ex) when(ex.statusCode==404)
+            {
+                return Task.FromResult(false);
+            }
+
         }
 
         public Task<Stream> GetStream(string bucket, string fileKey)

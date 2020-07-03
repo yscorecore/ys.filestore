@@ -1,16 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <ProjectReference Include="..\YS.FileStore.Core\YS.FileStore.Core.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Tencent.QCloud.Cos.Sdk" Version="5.4.11" />
     <PackageReference Include="YS.Knife.Core" Version="1.2.7" />
   </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
 </Project>
